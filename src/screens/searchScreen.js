@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, StatusBar } from "react-native";
 
 const searchScreen = () => {
     return(
-        <View>
+        <SafeAreaView style={{marginTop:StatusBar.currentHeight}}>
             <Text> Searcher </Text>
-        </View>
+        </SafeAreaView>
     )
 };
 
