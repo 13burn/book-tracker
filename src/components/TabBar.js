@@ -18,6 +18,12 @@ const TabBar = ({state, navigation}) => {
             >
                 <Text style={{alignSelf:"center"}}>My Books</Text>
             </TouchableOpacity>
+            <TouchableOpacity 
+            style={Styles.add}
+            onPress={() => navigation.navigate("AddBook")}
+            >
+                <Text style={{alignSelf:"center"}}>Add Book</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -46,6 +52,15 @@ const Styles = StyleSheet.create({
 
     },
     list:{
+        height:44,
+        width:200,
+        flex:1,
+        justifyContent:"center",
+        elevation:1,
+        borderWidth:1,
+        borderColor:"rgba(240,240,240,.8)",
+    },
+    add:{
         height:44,
         width:200,
         borderBottomRightRadius:22,
