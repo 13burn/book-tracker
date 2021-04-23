@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {createContext, useContext} from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import listScreen from "./src/screens/listScreen";
@@ -10,7 +10,12 @@ import TabBar from "./src/components/TabBar";
 
 const Tab = createBottomTabNavigator();
 
+const appContext = createContext()
+
+
 export default function App() {
+  const {count} = useContext(appContext)
+
   return (
     <NavigationContainer>
         <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props}/>} >
