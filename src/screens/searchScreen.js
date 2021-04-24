@@ -2,21 +2,23 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, Modal } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 
-
 const searchScreen = () => {
-    const [modalState, setModalState] = useState(false)
-
+    const [modalState, setModalState ] = useState(false)
     return(
         <SafeAreaView style={{marginTop:StatusBar.currentHeight, flex:1}} >
             <Text> Searcher </Text>
             {/* this part of the cde is the search part */}
             <View style={{width:"80%"}}>
-                <TextInput />
+                <TextInput 
+                  onChangeText={(text) => console.log(text) }
+                />
+                <Text>search for ITEM</Text>
                 <View>
                     <TouchableOpacity>
                         <Text>Search</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+
                         onPress={() => setModalState(!modalState)}
                     >
                         <Text>Scan Barcode</Text>

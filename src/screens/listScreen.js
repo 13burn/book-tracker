@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, Text, StatusBar, SafeAreaView } from "react-native";
 
 const listScreen = () => {
+    
     return(
         <SafeAreaView style={{marginTop: StatusBar.currentHeight, backgroundColor:"red", flex:1 }}>
             <Text> Lister </Text>

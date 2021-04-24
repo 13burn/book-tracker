@@ -3,7 +3,8 @@ import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from "react-nati
 
 const {width} = Dimensions.get("screen")
 
-const TabBar = ({state, navigation}) => {
+const TabBar = ({state, navigation,info}) => {
+    console.log(info)
     return(
         <View style={Styles.wraper }>
             <TouchableOpacity 
