@@ -1,19 +1,47 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet, Text, SafeAreaView, StatusBar, TextInput, TouchableOpacity, Modal } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import MainContext from  "../context/MainContext"
+
 
 
 const searchScreen = () => {
-    const [modalState, setModalState] = useState(false)
+  const searcher = (term) => {
+    if (term){
+      term = term.replace(" ", "+")
+      let url = "https://www.googleapis.com/books/v1/volumes?q=" + term;
+      console.log(url)
+      fetch(url)
+      .then(response => response.json())
+      .then(data => console.log(data));
+      
+    }else{
+      console.log("no term")
+    }
+
+  }
+
+  const dat = useContext(MainContext)
+  console.log(dat)
+  const [modalState, setModalState] = useState(false)
+  
+  
 
     return(
+
         <SafeAreaView style={{marginTop:StatusBar.currentHeight, flex:1}} >
             <Text> Searcher </Text>
             {/* this part of the cde is the search part */}
             <View style={{width:"80%"}}>
-                <TextInput />
+                <TextInput 
+                  onChangeText={(text) => {
+                    dat.setSearchTerm(text)
+                  }}
+                />
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => searcher(dat.searchTerm)}
+                    >
                         <Text>Search</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
