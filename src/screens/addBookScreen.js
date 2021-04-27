@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import MainContext from "../context/MainContext";
+import { useContext } from 'react/cjs/react.development';
 
 const addBookScreen = () =>{
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const context = useContext(MainContext)
+  console.log("addbookscreen", context)
 
   useEffect(() => {
     (async () => {

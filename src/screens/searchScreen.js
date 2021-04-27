@@ -5,7 +5,7 @@ import MainContext from  "../context/MainContext"
 
 
 
-const searchScreen = () => {
+const searchScreen = ({navigation}) => {
   const searcher = (term) => {
     if (term){
       term = term.replace(" ", "+")
@@ -21,8 +21,8 @@ const searchScreen = () => {
 
   }
 
-  const dat = useContext(MainContext)
-  console.log(dat)
+  const context = useContext(MainContext)
+  console.log("searchScreen", navigation)
   const [modalState, setModalState] = useState(false)
   
   
@@ -35,20 +35,22 @@ const searchScreen = () => {
             <View style={{width:"80%"}}>
                 <TextInput 
                   onChangeText={(text) => {
-                    dat.setSearchTerm(text)
+                    context.setSearchTerm(text)
                   }}
                 />
                 <View>
                     <TouchableOpacity
-                      onPress={() => searcher(dat.searchTerm)}
+                      onPress={() => searcher(context.searchTerm)}
                     >
                         <Text>Search</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setModalState(!modalState)}
-                    >
-                        <Text>Scan Barcode</Text>
-                    </TouchableOpacity>
+                    {/* 
+                      <TouchableOpacity
+                          onPress={() => setModalState(!modalState)}
+                      >
+                          <Text>Scan Barcode</Text>
+                      </TouchableOpacity>
+                     */}
                 </View>
             </View>
             {/* the modal goes here */}

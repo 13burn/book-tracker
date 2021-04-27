@@ -4,7 +4,6 @@ import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from "react-nati
 const {width} = Dimensions.get("screen")
 
 const TabBar = ({state, navigation,info}) => {
-    console.log(info)
     return(
         <View style={Styles.wraper }>
             <TouchableOpacity 
@@ -23,7 +22,7 @@ const TabBar = ({state, navigation,info}) => {
             style={Styles.add}
             onPress={() => navigation.navigate("AddBook")}
             >
-                <Text style={{alignSelf:"center"}}>Add Book</Text>
+                <Text style={{alignSelf:"center"}}>Scan bar Code</Text>
             </TouchableOpacity>
         </View>
     )
@@ -33,7 +32,7 @@ const Styles = StyleSheet.create({
     wraper:{
         position:"absolute",
         bottom:35,
-        width:"80%",
+        width:"90%",
         alignSelf:"center",
         height:30,
         flexDirection:"row",
