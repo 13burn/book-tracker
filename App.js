@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {createContext} from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import listScreen from "./src/screens/listScreen";
 import searchScreen from "./src/screens/searchScreen";
-import addBookScreen from "./src/screens/addBookScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import TabBar from "./src/components/TabBar";
+import TransitionScreen from "./src/screens/TransitionScreen";
+import listScreen from "./src/screens/listScreen";
 import { useState } from 'react/cjs/react.development';
 import MainContext from  "./src/context/MainContext"
 
@@ -30,10 +30,14 @@ export default function App() {
   return (
     <MainContext.Provider value={mainValues} >
       <NavigationContainer>
-          <Tab.Navigator initialRouteName="Home" tabBar={props => <TabBar {...props}/>} >
+          <Tab.Navigator initialRouteName="Transition" tabBar={props => <TabBar {...props}/>} >
+          <Tab.Screen name="Transition" component={TransitionScreen} />
+          <Tab.Screen name="BookList" component={listScreen} />
+            {/* 
             <Tab.Screen name="Home" component={searchScreen} />
-            <Tab.Screen name="BookList" component={listScreen} />
-            <Tab.Screen name="AddBook" component={addBookScreen} />
+              
+              <Tab.Screen name="AddBook" component={addBookScreen} />
+             */}
           </Tab.Navigator>      
       </NavigationContainer>
     </MainContext.Provider>

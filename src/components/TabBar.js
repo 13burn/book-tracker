@@ -8,7 +8,7 @@ const TabBar = ({state, navigation,info}) => {
         <View style={Styles.wraper }>
             <TouchableOpacity 
             style={Styles.searcher}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("Transition")}
             >
                 <Text style={{alignSelf:"center"}}>Search Books</Text>
             </TouchableOpacity>

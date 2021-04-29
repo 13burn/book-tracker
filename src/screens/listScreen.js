@@ -5,7 +5,6 @@ import MainContext from "../context/MainContext"
 
 const listScreen = () => {
     const context = useContext(MainContext)
-    console.log("listscreen", context)
     return(
         <SafeAreaView style={{marginTop: StatusBar.currentHeight, backgroundColor:"red", flex:1 }}>
             <Text> Lister </Text>

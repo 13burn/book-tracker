@@ -22,7 +22,7 @@ const searchScreen = ({navigation}) => {
   }
 
   const context = useContext(MainContext)
-  console.log("searchScreen", navigation)
+  
   const [modalState, setModalState] = useState(false)
   
   
@@ -38,19 +38,21 @@ const searchScreen = ({navigation}) => {
                     context.setSearchTerm(text)
                   }}
                 />
+                
                 <View>
                     <TouchableOpacity
                       onPress={() => searcher(context.searchTerm)}
+                      disabled={!context.searchTerm}
                     >
-                        <Text>Search</Text>
+                        {context.searchTerm.length >0? <Text>Search for {context.searchTerm}</Text>:<Text>Search</Text>}
                     </TouchableOpacity>
-                    {/* 
+                    
                       <TouchableOpacity
-                          onPress={() => setModalState(!modalState)}
+                          onPress={() => navigation.navigate("add")}
                       >
                           <Text>Scan Barcode</Text>
                       </TouchableOpacity>
-                     */}
+                    
                 </View>
             </View>
             {/* the modal goes here */}
