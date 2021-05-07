@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [searchTerm, setSearchTerm] = useState("")
-  const [searchList, setSearchList] = useState(null)
+  const [searchList, setSearchList] = useState([])
   const [scanStatus, setScanStatus] = useState(false)
 
   const mainValues ={
@@ -23,7 +23,7 @@ export default function App() {
     setSearchList,//this will be used to get/set the book list from the api response
     //a personal book list variable will be saved in firebase, login will be required
     setScanStatus,
-    scanStatus
+    scanStatus,
   }
   const [searchState, setSearchState] = useState()
   

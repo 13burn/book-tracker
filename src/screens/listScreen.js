@@ -3,6 +3,10 @@ import { View, StyleSheet, Text, StatusBar, SafeAreaView } from "react-native";
 import { useContext } from "react/cjs/react.development";
 import MainContext from "../context/MainContext"
 
+
+//for later
+//marginTop:StatusBar.currentHeight
+
 const listScreen = () => {
     const context = useContext(MainContext)
     return(
