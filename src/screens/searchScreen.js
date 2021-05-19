@@ -1,16 +1,20 @@
-import axios from "axios";
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Text, SafeAreaView, Image, TextInput, TouchableOpacity, ImageBackground, FlatList, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import MainContext from "../context/MainContext"
+import MainContext from "../context/MainContext";
+
 //import BookView from "../components/BookView";
 
 
 const searchScreen = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
+  const [dialogState, setDialogState] = useState(false)
   const context = useContext(MainContext)
 
+
   const BookView = (data) => {
+    const [dialogState, setDialogState] = useState(false)
     console.log("--------------------------------------------------------------------")
     console.log("context: ", selectedId)
     console.log(data.item.volumeInfo.authors)
@@ -19,7 +23,7 @@ const searchScreen = ({ navigation }) => {
         <TouchableOpacity
           onLongPress={() => setSelectedId(data.item.id)}
         >
-          <View style={{flexDirection:"row", flex:1}}>
+          <View style={{flexDirection:"row", flex:1, }}>
 
             <View style={styles.card}>{/* in here goes the pre selected info and the image*/}
               {/* image goes here */}
@@ -29,14 +33,14 @@ const searchScreen = ({ navigation }) => {
                   null
                   : 
                   <Image
-                    style={{ height: 70, width: 40 }}
+                    style={{ height: 65, width: 40, borderRadius:5 }}
                     source={{
                       uri: data.item.volumeInfo.imageLinks.smallThumbnail
                     }}
                   />}
               </View>
-              <View> 
-                <Text numberOfLines={1}>{data.item.volumeInfo.title}</Text>
+              <View style={{margin:5, width:"80%"}}> 
+                <Text numberOfLines={2} style={{flex:1}}>{data.item.volumeInfo.title}</Text>
                 {data.item.volumeInfo.authors ?
                   <Text>{data.item.volumeInfo.authors[0]}</Text>
                   :
@@ -49,7 +53,15 @@ const searchScreen = ({ navigation }) => {
         </TouchableOpacity>
         {/* if the view is selected the info goes here */}
         {data.item.id === selectedId ?
+
           <View>
+            <Dialog
+              onTouchOutside={() => {
+                setSelectedId(!dialogState)
+              }}
+            >
+
+            </Dialog>
             {data.item.volumeInfo.description ?
               <View style={styles.selectedCard}>
                 <ScrollView
@@ -73,6 +85,7 @@ const searchScreen = ({ navigation }) => {
           </View>
         :null}
       </View>
+    
     )
   }
 
@@ -155,7 +168,81 @@ const searchScreen = ({ navigation }) => {
             <FlatList
               showsVerticalScrollIndicator={false}
               data={context.searchList}
-              renderItem={BookView}
+              renderItem={({item}) => 
+              {  return(
+                <View style={{flex:1}}>{/* this is the main view */}
+                
+                <TouchableOpacity
+                  onLongPress={() => {
+                    setSelectedId(item.id)
+                    console.log(item)
+                  }}
+                >
+                  <View style={{flexDirection:"row", flex:1, }}>
+        
+                    <View style={styles.card}>{/* in here goes the pre selected info and the image*/}
+                      {/* image goes here */}
+                      <View>
+        
+                        {item.volumeInfo.imageLinks.smallThumbnail == null || !item.volumeInfo.imageLinks.smallThumbnail?
+                          null
+                          : 
+                          <Image
+                            style={{ height: 65, width: 40, borderRadius:5 }}
+                            source={{
+                              uri: item.volumeInfo.imageLinks.smallThumbnail
+                            }}
+                          />}
+                      </View>
+                      <View style={{margin:5, width:"80%"}}> 
+                        <Text numberOfLines={2} style={{flex:1}}>{item.volumeInfo.title}</Text>
+                        {item.volumeInfo.authors ?
+                          <Text>{item.volumeInfo.authors[0]}</Text>
+                          :
+                          <Text>Information not available</Text>
+        
+                        }
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+                {/* if the view is selected the info goes here */}
+                {item.id === selectedId ?
+        
+                  <View>
+                    <Dialog
+                      onTouchOutside={() => {
+                        setSelectedId(!dialogState)
+                      }}
+                      visible={dialogState}
+                    >
+        
+                    </Dialog>
+                    {item.volumeInfo.description ?
+                      <View style={styles.selectedCard}>
+                        <ScrollView
+                          style={{ height: 200, margin:10}}
+                        >
+        
+                          <Text style={{height:200}}>{item.volumeInfo.description}</Text>
+                        </ScrollView>
+                      </View>
+                      :
+                      <View style={styles.noData}>
+                        <ScrollView
+                          style={{ height: 40 }}
+                        >
+        
+                          <Text>No description available</Text>
+                        </ScrollView>
+                      </View>
+        
+                    }
+                  </View>
+                :null}
+              </View>
+            )}
+              }
               keyExtractor={item => item.id}
               extraData={selectedId}
             />
@@ -243,8 +330,10 @@ const styles = StyleSheet.create({
     margin: 3,
     elevation: 3,
     borderRadius: 15,
-    padding: 5,
-    flexDirection: "row"
+    padding: 7,
+    flex:1,
+    flexDirection: "row",
+
   },
   selectedCard: {
     height: 250,
