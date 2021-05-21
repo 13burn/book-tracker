@@ -30,7 +30,7 @@ const searchScreen = ({ navigation }) => {
               {/* image goes here */}
               <View>
 
-                {data.item.volumeInfo.imageLinks.smallThumbnail == null || !data.item.volumeInfo.imageLinks.smallThumbnail?
+                {typeof(item.volumeInfo.imageLinks.smallThumbnail) == "undefined"?
                   null
                   : 
                   <Image
