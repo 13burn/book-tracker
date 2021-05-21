@@ -1,4 +1,4 @@
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import Dialog, { SlideAnimation, DialogContent, DialogFooter, DialogButton } from 'react-native-popup-dialog';
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Text, SafeAreaView, Image, TextInput, TouchableOpacity, ImageBackground, FlatList, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
@@ -10,14 +10,15 @@ import MainContext from "../context/MainContext";
 const searchScreen = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [dialogState, setDialogState] = useState(false)
+  const [selectedItem, setSelectedItem] = useState({})
   const context = useContext(MainContext)
 
 
   const BookView = (data) => {
     const [dialogState, setDialogState] = useState(false)
-    console.log("--------------------------------------------------------------------")
-    console.log("context: ", selectedId)
-    console.log(data.item.volumeInfo.authors)
+    //console.log("--------------------------------------------------------------------")
+    //console.log("context: ", selectedId)
+    //console.log(data.item.volumeInfo.authors)
     return (
       <View style={{flex:1}}>{/* this is the main view */}
         <TouchableOpacity
@@ -168,6 +169,8 @@ const searchScreen = ({ navigation }) => {
             <FlatList
               showsVerticalScrollIndicator={false}
               data={context.searchList}
+              keyExtractor={item => item.id}
+              extraData={selectedId}
               renderItem={({item}) => 
               {  return(
                 <View style={{flex:1}}>{/* this is the main view */}
@@ -175,7 +178,9 @@ const searchScreen = ({ navigation }) => {
                 <TouchableOpacity
                   onLongPress={() => {
                     setSelectedId(item.id)
-                    console.log(item)
+                    setSelectedItem(item)
+                    console.log(item.id)
+                    setDialogState(!dialogState)
                   }}
                 >
                   <View style={{flexDirection:"row", flex:1, }}>
@@ -184,7 +189,7 @@ const searchScreen = ({ navigation }) => {
                       {/* image goes here */}
                       <View>
         
-                        {item.volumeInfo.imageLinks.smallThumbnail == null || !item.volumeInfo.imageLinks.smallThumbnail?
+                        {typeof(item.volumeInfo.imageLinks.smallThumbnail) === "undefined" ?
                           null
                           : 
                           <Image
@@ -207,49 +212,43 @@ const searchScreen = ({ navigation }) => {
                   </View>
                 </TouchableOpacity>
                 {/* if the view is selected the info goes here */}
-                {item.id === selectedId ?
-        
-                  <View>
-                    <Dialog
-                      onTouchOutside={() => {
-                        setSelectedId(!dialogState)
-                      }}
-                      visible={dialogState}
-                    >
-        
-                    </Dialog>
-                    {item.volumeInfo.description ?
-                      <View style={styles.selectedCard}>
-                        <ScrollView
-                          style={{ height: 200, margin:10}}
-                        >
-        
-                          <Text style={{height:200}}>{item.volumeInfo.description}</Text>
-                        </ScrollView>
-                      </View>
-                      :
-                      <View style={styles.noData}>
-                        <ScrollView
-                          style={{ height: 40 }}
-                        >
-        
-                          <Text>No description available</Text>
-                        </ScrollView>
-                      </View>
-        
-                    }
-                  </View>
-                :null}
+                {/*item.id === selectedId ?null:null*/}
               </View>
             )}
               }
-              keyExtractor={item => item.id}
-              extraData={selectedId}
+              
             />
-          </View> :
-          null}
+          </View> 
+          : null}
 
+        <Dialog
+          visible={dialogState}
+          onTouchOutside={() => {
+            setDialogState(!dialogState);
+            console.log("dialog closed")
+          }}
+          dialogAnimation={new SlideAnimation({
+            slideFrom: 'bottom',
+          })}
+        >
+          <DialogContent>
+            <Text> This is ok </Text>
+          </DialogContent>
+          <DialogFooter>
+            <DialogButton 
+              text="Save this book"
+              onPress={() =>{
 
+              }}
+            />
+            <DialogButton 
+              text="close"
+              onPress={() => {
+                setDialogState(false)
+              }}
+            />
+          </DialogFooter>
+        </Dialog>
         {/* the modal goes here */}
       </ImageBackground>
 
