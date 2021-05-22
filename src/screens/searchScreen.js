@@ -14,82 +14,6 @@ const searchScreen = ({ navigation }) => {
   const context = useContext(MainContext)
 
 
-  const BookView = (data) => {
-    const [dialogState, setDialogState] = useState(false)
-    //console.log("--------------------------------------------------------------------")
-    //console.log("context: ", selectedId)
-    //console.log(data.item.volumeInfo.authors)
-    return (
-      <View style={{flex:1}}>{/* this is the main view */}
-        <TouchableOpacity
-          onLongPress={() => setSelectedId(data.item.id)}
-        >
-          <View style={{flexDirection:"row", flex:1, }}>
-
-            <View style={styles.card}>{/* in here goes the pre selected info and the image*/}
-              {/* image goes here */}
-              <View>
-
-                {typeof(item.volumeInfo.imageLinks.smallThumbnail) == "undefined"?
-                  null
-                  : 
-                  <Image
-                    style={{ height: 65, width: 40, borderRadius:5 }}
-                    source={{
-                      uri: data.item.volumeInfo.imageLinks.smallThumbnail
-                    }}
-                  />}
-              </View>
-              <View style={{margin:5, width:"80%"}}> 
-                <Text numberOfLines={2} style={{flex:1}}>{data.item.volumeInfo.title}</Text>
-                {data.item.volumeInfo.authors ?
-                  <Text>{data.item.volumeInfo.authors[0]}</Text>
-                  :
-                  <Text>Information not available</Text>
-
-                }
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-        {/* if the view is selected the info goes here */}
-        {data.item.id === selectedId ?
-
-          <View>
-            <Dialog
-              onTouchOutside={() => {
-                setSelectedId(!dialogState)
-              }}
-            >
-
-            </Dialog>
-            {data.item.volumeInfo.description ?
-              <View style={styles.selectedCard}>
-                <ScrollView
-                  style={{ height: 200, margin:10}}
-                >
-
-                  <Text style={{height:200}}>{data.item.volumeInfo.description}</Text>
-                </ScrollView>
-              </View>
-              :
-              <View style={styles.noData}>
-                <ScrollView
-                  style={{ height: 40 }}
-                >
-
-                  <Text>No description available</Text>
-                </ScrollView>
-              </View>
-
-            }
-          </View>
-        :null}
-      </View>
-    
-    )
-  }
-
   const searcher = (term) => {
     if (term) {
       term = term.replace(" ", "+")
@@ -179,7 +103,9 @@ const searchScreen = ({ navigation }) => {
                   onLongPress={() => {
                     setSelectedId(item.id)
                     setSelectedItem(item)
-                    console.log(item.id)
+                    
+                    console.log("item", item)
+                    console.log("selectedItem:", selectedItem)
                     setDialogState(!dialogState)
                   }}
                 >
@@ -189,7 +115,7 @@ const searchScreen = ({ navigation }) => {
                       {/* image goes here */}
                       <View>
         
-                        {typeof(item.volumeInfo.imageLinks.smallThumbnail) === "undefined" ?
+                        { typeof(item.volumeInfo.imageLinks) == "undefined" || !item.volumeInfo.imageLinks.smallThumbnail ?
                           null
                           : 
                           <Image
@@ -238,7 +164,9 @@ const searchScreen = ({ navigation }) => {
             <DialogButton 
               text="Save this book"
               onPress={() =>{
-
+                context.appendData(selectedItem)
+                console.log("item:", JSON.stringify( selectedItem))
+                
               }}
             />
             <DialogButton 
