@@ -1,5 +1,6 @@
-import Dialog, { SlideAnimation, DialogContent, DialogFooter, DialogButton } from 'react-native-popup-dialog';
+import Dialog, { SlideAnimation, DialogContent, DialogFooter, DialogButton, DialogTitle } from 'react-native-popup-dialog';
 import React, { useContext, useState, useEffect } from "react";
+import HTMLView from 'react-native-htmlview';
 import { View, StyleSheet, Text, SafeAreaView, Image, TextInput, TouchableOpacity, ImageBackground, FlatList, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import MainContext from "../context/MainContext";
@@ -19,7 +20,7 @@ const searchScreen = ({ navigation }) => {
       let url = "https://www.googleapis.com/books/v1/volumes?q=" + term;
       fetch(url)
         .then(response => response.json())
-        .then(data =>  context.setSearchList(data.items));
+        .then(data => context.setSearchList(data.items));
 
 
     } else {
@@ -28,7 +29,7 @@ const searchScreen = ({ navigation }) => {
 
   }
 
-  
+
 
   const image = require("../../assets/images/Caesar.jpg")
 
@@ -94,55 +95,59 @@ const searchScreen = ({ navigation }) => {
               data={context.searchList}
               keyExtractor={item => item.id}
               extraData={selectedId}
-              renderItem={({item}) => 
-              {  return(
-                <View style={{flex:1}}>{/* this is the main view */}
-                
-                <TouchableOpacity
-                  onLongPress={() => {
-                    setSelectedId(item.id)
-                    setSelectedItem(item)
-                    //console.log("item", item)
-                    //console.log("selectedItem:", selectedItem)
-                    setDialogState(!dialogState)
-                  }}
-                >
-                  <View style={{flexDirection:"row", flex:1, }}>
-        
-                    <View style={styles.card}>{/* in here goes the pre selected info and the image*/}
-                      {/* image goes here */}
-                      <View>
-        
-                        { typeof(item.volumeInfo.imageLinks) == "undefined" || !item.volumeInfo.imageLinks.smallThumbnail ?
-                          null
-                          : 
-                          <Image
-                            style={{ height: 65, width: 40, borderRadius:5 }}
-                            source={{
-                              uri: item.volumeInfo.imageLinks.smallThumbnail
-                            }}
-                          />}
+              renderItem={({ item }) => {
+                return (
+                  <View style={{ flex: 1 }}>{/* this is the main view */}
+
+                    <TouchableOpacity
+                      onLongPress={() => {
+                        setSelectedId(item.id)
+                        setSelectedItem(item)
+                        //console.log("item", item)
+                        console.log("selectedItem:", selectedItem)
+                        setDialogState(!dialogState)
+                      }}
+                    >
+                      <View style={{ flexDirection: "row", flex: 1, }}>
+
+                        <View style={styles.card}>{/* in here goes the pre selected info and the image*/}
+                          {/* image goes here */}
+                          <View>
+
+                            {typeof (item.volumeInfo.imageLinks) == "undefined" || !item.volumeInfo.imageLinks.smallThumbnail ?
+                              <Image
+                                style={{ height: 65, width: 40, borderRadius: 5 }}
+                                source={require("../../assets/images/NA1.jpg")}
+                              />
+                              :
+                              <Image
+                                style={{ height: 65, width: 40, borderRadius: 5 }}
+                                source={{
+                                  uri: item.volumeInfo.imageLinks.smallThumbnail
+                                }}
+                              />}
+                          </View>
+                          <View style={{ margin: 5, width: "80%" }}>
+                            <Text numberOfLines={2} style={{ flex: 1 }}>{item.volumeInfo.title}</Text>
+                            {item.volumeInfo.authors ?
+                              <Text>{item.volumeInfo.authors[0]}</Text>
+                              :
+                              <Text>No author information available</Text>
+
+                            }
+                          </View>
+                        </View>
                       </View>
-                      <View style={{margin:5, width:"80%"}}> 
-                        <Text numberOfLines={2} style={{flex:1}}>{item.volumeInfo.title}</Text>
-                        {item.volumeInfo.authors ?
-                          <Text>{item.volumeInfo.authors[0]}</Text>
-                          :
-                          <Text>Information not available</Text>
-        
-                        }
-                      </View>
-                    </View>
+                    </TouchableOpacity>
+                    {/* if the view is selected the info goes here */}
+                    {/*item.id === selectedId ?null:null*/}
                   </View>
-                </TouchableOpacity>
-                {/* if the view is selected the info goes here */}
-                {/*item.id === selectedId ?null:null*/}
-              </View>
-            )}
+                )
               }
-              
+              }
+
             />
-          </View> 
+          </View>
           : null}
 
         <Dialog
@@ -157,19 +162,38 @@ const searchScreen = ({ navigation }) => {
           })}
         >
           <DialogContent>
-            <Text> {selectedItem.id} </Text>
+            {selectedItem.volumeInfo ?
+              <View>
+
+                <DialogTitle
+                  title={selectedItem.volumeInfo.title}
+                />
+                {selectedItem.searchInfo ?
+                  <HTMLView
+                    value={selectedItem.searchInfo.textSnippet}
+                  />
+                  :
+                  <Text>No description available</Text>
+                }
+
+
+              </View>
+              :
+              <Text>nothing here yet</Text>
+            }
+
           </DialogContent>
           <DialogFooter>
-            <DialogButton 
+            <DialogButton
               text="Save this book"
-              onPress={() =>{
+              onPress={() => {
                 context.appendData(selectedItem)
                 //console.log("item:", selectedItem)
                 setDialogState(false)
-                
+
               }}
             />
-            <DialogButton 
+            <DialogButton
               text="close"
               onPress={() => {
                 setDialogState(false)
@@ -177,6 +201,7 @@ const searchScreen = ({ navigation }) => {
             />
           </DialogFooter>
         </Dialog>
+
         {/* the modal goes here */}
       </ImageBackground>
 
@@ -258,7 +283,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: 15,
     padding: 7,
-    flex:1,
+    flex: 1,
     flexDirection: "row",
 
   },
