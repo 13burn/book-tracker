@@ -11,20 +11,21 @@ import MainContext from "../context/MainContext"
 const listScreen = () => {
     const context = useContext(MainContext);
     const image = require("../../assets/images/unam.jpeg");
-    console.log("bookList: ",context.bookList)
+    //context.getData()
 
     return (
         <SafeAreaView style={{ flex: 1, marginTop:Constants.statusBarHeight}}>
             <Button
                     title="clear"
-                    onPress={context.storeData}
+                    onPress={() => context.storeData([])}
                 />
             <ImageBackground source={image} style={{ height: "100%", width: "100%", flex: 1 }}>
                 <FlatList
                     data={context.bookList}
-                    renderItem={() => {
+                    renderItem={({item}) => {
+                        
                         return(
-                            <Text>this is a book</Text>
+                            <Text>this is a book {item.id}</Text>
                         )
                     }}
                 />

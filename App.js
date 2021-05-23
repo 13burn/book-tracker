@@ -7,7 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import TabBar from "./src/components/TabBar";
 import TransitionScreen from "./src/screens/TransitionScreen";
 import listScreen from "./src/screens/listScreen";
-import { useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react/cjs/react.development';
 import MainContext from  "./src/context/MainContext"
 
 const Tab = createBottomTabNavigator();
@@ -20,10 +20,15 @@ export default function App() {
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('bookList')
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
+      let jsonValue = await AsyncStorage.getItem('bookList')
+      console.log("--------------------------")
+      console.log("pre:", jsonValue)
+      setBooklist(jsonValue)
+      console.log("pos:", jsonValue)
+      //return jsonValue = JSON.parse(jsonValue);
+      
     } catch(e) {
-      console.log("Error reading value")
+      console.log("Error:", e)
       // error reading value
     }
   }
@@ -32,6 +37,7 @@ export default function App() {
     try {
       const jsonValue = JSON.stringify(value)
       await AsyncStorage.setItem('bookList', jsonValue)
+      setBooklist(value)
     } catch (e) {
       // saving error
     }
@@ -40,9 +46,16 @@ export default function App() {
   const appendData = async (newVal) => {
     //let netList = getData().concat(newVal)
     try {
-      setBooklist(bookList.concat(newVal));
-      const nuArr = bookList;
-      const jsonValue = JSON.stringify([...new Set(nuArr)]);
+      console.log("-----------------------------------------------------------------------------------")
+
+      //console.log("type:", typeof(newVal))      
+      let nuArr = bookList.concat( newVal);
+      
+      //console.log("nuArr length:", length(nuArr))
+      nuArr = [...new Set(nuArr)]
+      setBooklist(nuArr)
+      const jsonValue = JSON.stringify(nuArr);
+      console.log("booklist:", bookList)
       await AsyncStorage.setItem('bookList', jsonValue);
     } catch (e) {
       console.log("Error:", e)
@@ -62,10 +75,27 @@ export default function App() {
     bookList,
     setBooklist,
     appendData,
+    storeData,
     getData
   }
   const [searchState, setSearchState] = useState()
   
+  useEffect(async () =>{
+    try {
+      let jsonValue = await AsyncStorage.getItem('bookList')
+      console.log("--------------------------")
+      jsonValue = JSON.parse(jsonValue)
+      setBooklist(jsonValue)
+      console.log("pos:", jsonValue)
+      console.log("bookList:", bookList)
+      //return jsonValue = JSON.parse(jsonValue);
+      
+    } catch(e) {
+      console.log("Error:", e)
+      // error reading value
+    }}, [])
+  
+
   return (
     <MainContext.Provider value={mainValues} >
       <NavigationContainer>

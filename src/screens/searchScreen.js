@@ -1,5 +1,5 @@
 import Dialog, { SlideAnimation, DialogContent, DialogFooter, DialogButton } from 'react-native-popup-dialog';
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, StyleSheet, Text, SafeAreaView, Image, TextInput, TouchableOpacity, ImageBackground, FlatList, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import MainContext from "../context/MainContext";
@@ -12,7 +12,6 @@ const searchScreen = ({ navigation }) => {
   const [dialogState, setDialogState] = useState(false)
   const [selectedItem, setSelectedItem] = useState({})
   const context = useContext(MainContext)
-
 
   const searcher = (term) => {
     if (term) {
@@ -43,7 +42,7 @@ const searchScreen = ({ navigation }) => {
       >
         <View
           //this is the search view
-          style={{ marginTop: (context.searchList.length > 0) ? "5%" : "20%" }}
+          style={{ marginTop: (context.searchList.length > 0) ? "5%" : "30%" }}
         >
 
           {/* this part of the cde is the search part */}
@@ -103,9 +102,8 @@ const searchScreen = ({ navigation }) => {
                   onLongPress={() => {
                     setSelectedId(item.id)
                     setSelectedItem(item)
-                    
-                    console.log("item", item)
-                    console.log("selectedItem:", selectedItem)
+                    //console.log("item", item)
+                    //console.log("selectedItem:", selectedItem)
                     setDialogState(!dialogState)
                   }}
                 >
@@ -152,20 +150,22 @@ const searchScreen = ({ navigation }) => {
           onTouchOutside={() => {
             setDialogState(!dialogState);
             console.log("dialog closed")
+            //console.log("selected Item:", selectedItem)
           }}
           dialogAnimation={new SlideAnimation({
             slideFrom: 'bottom',
           })}
         >
           <DialogContent>
-            <Text> This is ok </Text>
+            <Text> {selectedItem.id} </Text>
           </DialogContent>
           <DialogFooter>
             <DialogButton 
               text="Save this book"
               onPress={() =>{
                 context.appendData(selectedItem)
-                console.log("item:", JSON.stringify( selectedItem))
+                //console.log("item:", selectedItem)
+                setDialogState(false)
                 
               }}
             />
